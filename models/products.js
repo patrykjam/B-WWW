@@ -12,7 +12,7 @@ var productSchema = new Schema({
     images: {type: Array, required: true}
 });
 
-productSchema.plugin(autoIncrement.plugin, { model: 'Product', field: 'id'});
+productSchema.plugin(autoIncrement.plugin, {model: 'Product', field: 'id'});
 
 var Product = mongoose.model('Product', productSchema);
 

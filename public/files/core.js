@@ -25,6 +25,26 @@ addCommentFun = function (rowNumber, columnNumber, device, pid) {
     return false;
 };
 
+addToBasket = function (pid) {
+    console.log('ATB ' + pid);
+
+    var url = "/internal/add-to-basket";
+    var method = "POST";
+
+    var postData = JSON.stringify({product_id: pid});
+    var async = true;
+
+    var request = new XMLHttpRequest();
+
+    request.onload = function () {
+    };
+
+    request.open(method, url, async);
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.send(postData.toString());
+    return false;
+};
+
 addComment = function (wartcomment, wartname, rowNumber, columnNumber) {
     var comment = $("<p></p>").text(wartcomment);
     var commentDiv = $("<div class='commentText'></div>");
@@ -157,7 +177,7 @@ function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, spe
 
     //basket button
     var addToBasketButton = $('<form id="form' + rowNumber + "and" + columnNumber + '" ' +
-        ' method="post">' +
+        ' method="post" onsubmit="return addToBasket(' + pid + ')">' +
         '<button type="submit" class="btn btn-default">Add to basket</button>' +
         '</form>');
 
@@ -185,6 +205,10 @@ function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, spe
     column.append(addCommentButton);
     column.append(comment);
 
+    // $.getJSON('/internal/loggedIn', function (logged) {
+    //     if(logged.loggedIn)
+    //         column.append(addToBasketButton)
+    // }); TODO: THIS
     column.append(addToBasketButton);
 
     $(".row" + rowNumber).append(column);
@@ -198,23 +222,6 @@ function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, spe
     });
 
     $("#form" + rowNumber + "and" + columnNumber).submit(function (e) {
-
         e.preventDefault();
-        // console.log("logg");
-
-        var url = "/internal/add-to-basket";
-        var method = "POST";
-
-        var postData = JSON.stringify({product_id: pid, author: nameVal, comment: commentVal});
-        var async = true;
-
-        var request = new XMLHttpRequest();
-
-        request.onload = function () {
-        };
-
-        request.open(method, url, async);
-        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        request.send(postData.toString());
     });
 }

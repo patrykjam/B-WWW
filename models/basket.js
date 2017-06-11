@@ -1,15 +1,15 @@
-// // grab the things we need
-// var mongoose = require('mongoose');
-// var Schema = mongoose.Schema;
-//
-// // create a schema
-// var BasketSchema = new Schema({
-//     username: {type: String, required: true, unique: true},
-//     products: {type: Array, default: []}
-// });
-//
-//
-// // we need to create a model using it
-// var Basket = mongoose.model('Basket', basketSchema);
-//
-// module.exports = Basket;
+var mongoose = require('mongoose');
+var autoIncrement = require('mongoose-auto-increment');
+var Schema = mongoose.Schema;
+
+var basketSchema = new Schema({
+    id: {type: Number},
+    username: {type: String, required: true},
+    product: {type: Number}
+});
+
+basketSchema.plugin(autoIncrement.plugin, {model: 'Basket', field: 'id'});
+
+var Basket = mongoose.model('Basket', basketSchema);
+
+module.exports = Basket;

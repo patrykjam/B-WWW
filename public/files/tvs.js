@@ -10,7 +10,7 @@ var scrollListener = function () {
         if ($(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
             addNextTV();
         }
-        if(current <= number_of_tvs)
+        if (current <= number_of_tvs)
             scrollListener();
         else {
             console.log("Scroll over");
@@ -64,7 +64,7 @@ addNextTV = function () {
                     data[current - 1].images[2], data[current - 1].images[3]);
             current += 1;
         }
-        if(current % 2 === 0){
+        if (current % 2 === 0) {
             addNextTV();
         }
     }
