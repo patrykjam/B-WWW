@@ -1,4 +1,4 @@
-function addRow(id, name) {
+function addRowtoTable(id, name) {
     var tr = $('<tr class="tr' + id + '"></tr>');
     var tdId = $('<td>' + id + '</td>');
     var tdName = $('<td>' + name + '</td>');
@@ -51,7 +51,7 @@ $(document).ready(function () {
             else
                 $(".table-basket").show();
             for (var i = 0; i < basket.length; i++) {
-                addRow(basket[i].id, getName(basket[i].product_id, products))
+                addRowtoTable(basket[i].id, getName(basket[i].product_id, products))
             }
         });
     });

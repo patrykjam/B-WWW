@@ -13,14 +13,12 @@ var scrollListener = function () {
         if (current <= number_of_pcs)
             scrollListener();
         else {
-            console.log("Scroll over");
         }
     });
 };
 
 
 addNextPC = function () {
-    console.log('Adding next');
     if (current > number_of_pcs) {
     }
     else {

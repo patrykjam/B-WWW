@@ -13,12 +13,10 @@ var scrollListener = function () {
         if (current <= number_of_tvs)
             scrollListener();
         else {
-            console.log("Scroll over");
         }
     });
 };
 addNextTV = function () {
-    console.log('Adding next');
     if (current > number_of_tvs) {
     }
     else {
