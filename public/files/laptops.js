@@ -6,29 +6,6 @@ var current;
 var data;
 
 var scrollListener = function () {
-    $(window).one("scroll", function () {
-        if ($(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
-            switch (counter) {
-                case 1:
-                    addSecondColumn();
-                    break;
-                case 2:
-                    addThirdColumn();
-                    break;
-                case 3:
-                    addLastColumn();
-                    break;
-                default:
-                    break;
-            }
-            console.log("Loaded " + counter);
-        }
-        if (counter < 4)
-            scrollListener()
-    });
-};
-
-var scrollListener = function () {
     $(window).one("scroll", function () { //unbinds itself every time it fires
         if ($(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
             addNextPC();
@@ -87,7 +64,7 @@ addNextPC = function () {
                     data[current - 1].images[2], data[current - 1].images[3]);
             current += 1;
         }
-        if(current % 4 === 0){
+        if (current % 4 !== 1) {
             addNextPC();
         }
     }
