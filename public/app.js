@@ -63,11 +63,13 @@ app.config(function ($routeProvider) {
 
         .when('/panel', {
             templateUrl: 'pages/Panel.html',
-            controller: 'panelController',
-            auth: loggedIn
+            controller: 'panelController'
         })
 
-    // .otherwise()
+        .when('/basket', {
+            templateUrl: 'pages/Basket.html',
+            controller: 'basketController'
+        })
     ;
 
 });
@@ -179,6 +181,19 @@ app.controller('panelController', function ($scope) {
             ' <p>' + username + '</p> ' +
             '<h3>Użytkownik od: </h3>' +
             ' <p>' + dateOf + '</p>';
+    }
+});
+
+app.controller('basketController', function ($scope) {
+    if (!loggedIn)
+        $scope.header = '<h1>ZALOGUJ SIĘ!</h1>';
+    else {
+        $scope.header = '<h1>Koszyk</h1>';
+
+        // $scope.message = '<h1>Panel</h1> <h3>Nazwa użytkownika: </h3>' +
+        //     ' <p>' + username + '</p> ' +
+        //     '<h3>Użytkownik od: </h3>' +
+        //     ' <p>' + dateOf + '</p>';
     }
 });
 

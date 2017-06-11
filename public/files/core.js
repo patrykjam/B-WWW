@@ -178,7 +178,7 @@ function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, spe
     //basket button
     var addToBasketButton = $('<form id="form' + rowNumber + "and" + columnNumber + '" ' +
         ' method="post" onsubmit="return addToBasket(' + pid + ')">' +
-        '<button type="submit" class="btn btn-default">Add to basket</button>' +
+        '<button type="submit" class="btn btn-default btn-block">Add to basket</button>' +
         '</form>');
 
     formGroup1.append(nameLabel);

@@ -118,6 +118,8 @@ app.post("/register", function (req, res) {
 });
 
 app.get('/internal/loggedIn', function (req, res) {
+    session = req.session;
+
     if (app.locals.users.length !== 0)
         return res.json({loggedIn: true, username: app.locals.users[0].username, dateOf: app.locals.users[0].reg_date});
     else
@@ -125,6 +127,7 @@ app.get('/internal/loggedIn', function (req, res) {
 });
 
 app.get('/internal/tvs', function (req, res) {
+    session = req.session;
 
     var Product = require('./models/products');
 
@@ -134,6 +137,7 @@ app.get('/internal/tvs', function (req, res) {
 });
 
 app.get('/internal/pcs', function (req, res) {
+    session = req.session;
 
     var Product = require('./models/products');
 
@@ -142,7 +146,18 @@ app.get('/internal/pcs', function (req, res) {
     });
 });
 
+app.get('/internal/products', function (req, res) {
+    session = req.session;
+
+    var Product = require('./models/products');
+
+    Product.find({}).sort('id').exec(function (err, products) {
+        res.send(products);
+    });
+});
+
 app.post('/internal/add-comment', function (req, res) {
+    session = req.session;
 
     var commentJson = req.body;
     // console.log(commentJson);
@@ -161,6 +176,7 @@ app.post('/internal/add-comment', function (req, res) {
 });
 
 app.get('/internal/get-comments/:prodid', function (req, res) {
+    session = req.session;
 
     var Comment = require('./models/comments');
 
@@ -172,20 +188,66 @@ app.get('/internal/get-comments/:prodid', function (req, res) {
 });
 
 app.post('/internal/add-to-basket', function (req, res) {
+    session = req.session;
 
     var json = req.body;
-    // var Comment = require('./models/comments');
-    //
-    // var newComment = Comment({
-    //     product_id: commentJson.product_id,
-    //     comment: commentJson.comment,
-    //     author: commentJson.author
-    // });
-    //
-    // newComment.save(function (err) {
-    //     if (err) throw err;
-    //     console.log('Comment added!');
-    // });
+    var Basket = require('./models/basket');
+    if (app.locals.users.length !== 0) {
+
+        var newBasketItem = Basket({
+            product_id: json.product_id,
+            username: app.locals.users[0].username
+        });
+
+        newBasketItem.save(function (err) {
+            if (err) throw err;
+            console.log('Product added to basket!');
+        })
+
+    } else {
+        res.send('404');
+        console.log('Not logged in!');
+        console.log(app.locals.users.length)
+    }
+});
+
+app.get('/internal/get-basket', function (req, res) {
+    session = req.session;
+
+    var Basket = require('./models/basket');
+    if (app.locals.users.length !== 0) {
+        Basket.find({username: app.locals.users[0].username}).sort('id').exec(function (err, basket) {
+            res.send(basket);
+        });
+
+    } else {
+        res.send('[]');
+        console.log('Not logged in!')
+    }
+});
+
+app.post('/internal/remove-from-basket', function (req, res) {
+    session = req.session;
+
+    var bid = req.body.bid;
+
+    var Basket = require('./models/basket');
+    if (app.locals.users.length !== 0) {
+        Basket.findOne({username: app.locals.users[0].username, id: bid }).exec(function (err, basket) {
+            if(basket.length !== 0){
+                basket.remove(function(err) {
+                    if (err) throw err;
+
+                    console.log('Item successfully deleted!');
+                });
+            }
+
+        });
+
+    } else {
+        res.send('[]');
+        console.log('Not logged in!')
+    }
 });
 
 

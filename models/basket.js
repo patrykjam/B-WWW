@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var basketSchema = new Schema({
     id: {type: Number},
     username: {type: String, required: true},
-    product: {type: Number}
+    product_id: {type: Number}
 });
 
 basketSchema.plugin(autoIncrement.plugin, {model: 'Basket', field: 'id'});
