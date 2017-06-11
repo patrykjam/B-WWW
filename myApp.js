@@ -308,7 +308,6 @@ app.post('/internal/remove-product', function (req, res) {
         console.log('Not logged in!')
     }
 });
-//TODO:: remove image files
 
 app.post("/add-new-product", upload.array('imagefiles'), function (req, res) {
     var imageFiles = req.files;
