@@ -1,0 +1,27 @@
+<div class="jumbotron text-center">
+    <h1>Sign up</h1>
+    <h2>{{message}}</h2>
+    <div class="container">
+        <form role="form" method="post" action="/register">
+            <div class="row">
+                <div class="form-group col-lg-1">
+                    <label> Username
+                        <input type="text" name="username" class="form-control form-my"/>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-1">
+                    <label>
+                        Password
+                        <input type="password" name="password" class="form-control input-normal form-my"/>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
