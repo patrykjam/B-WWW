@@ -10,7 +10,7 @@ var scrollListener = function () {
         if ($(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
             addNextPC();
         }
-        if(current <= number_of_pcs)
+        if (current <= number_of_pcs)
             scrollListener();
         else {
             console.log("Scroll over");

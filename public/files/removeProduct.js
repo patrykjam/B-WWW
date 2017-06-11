@@ -45,12 +45,12 @@ function getName(pid, products) {
 
 $(document).ready(function () {
     $.getJSON('/internal/products', function (products) {
-            if (products.length === 0)
-                $(".table-remove-product").hide();
-            else
-                $(".table-remove-product").show();
-            for (var i = 0; i < products.length; i++) {
-                addRow(products[i].id, getName(products[i].id, products))
-            }
+        if (products.length === 0)
+            $(".table-remove-product").hide();
+        else
+            $(".table-remove-product").show();
+        for (var i = 0; i < products.length; i++) {
+            addRow(products[i].id, getName(products[i].id, products))
+        }
     });
 });
