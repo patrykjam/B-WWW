@@ -1,4 +1,5 @@
 var loggedIn = false;
+var admin = false;
 var username;
 var dateOf;
 
@@ -70,6 +71,16 @@ app.config(function ($routeProvider) {
             templateUrl: 'pages/Basket.html',
             controller: 'basketController'
         })
+
+        .when('/removeProduct', {
+            templateUrl: 'pages/RemoveProduct.html',
+            controller: 'removeProductController'
+        })
+
+        .when('/addProduct', {
+            templateUrl: 'pages/AddProduct.html',
+            controller: 'addProductController'
+        })
     ;
 
 });
@@ -108,6 +119,7 @@ app.controller("mainController", function ($scope, $http) {
             username = data.username;
             dateOf = data.dateOf;
         }
+        admin = data.admin;
     });
 
     $scope.menus = [
@@ -189,11 +201,23 @@ app.controller('basketController', function ($scope) {
         $scope.header = '<h1>ZALOGUJ SIĘ!</h1>';
     else {
         $scope.header = '<h1>Koszyk</h1>';
+    }
+});
 
-        // $scope.message = '<h1>Panel</h1> <h3>Nazwa użytkownika: </h3>' +
-        //     ' <p>' + username + '</p> ' +
-        //     '<h3>Użytkownik od: </h3>' +
-        //     ' <p>' + dateOf + '</p>';
+app.controller('addProductController', function ($scope) {
+    if (!admin)
+        $scope.header = '<h1>404</h1>';
+    else {
+        $scope.header = '<h1>Dodaj produkt: </h1>';
+    }
+});
+
+
+app.controller('removeProductController', function ($scope) {
+    if (!admin)
+        $scope.header = '<h1>404</h1>';
+    else {
+        $scope.header = '<h1>Usuń produkt: </h1>';
     }
 });
 

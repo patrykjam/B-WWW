@@ -121,9 +121,12 @@ app.get('/internal/loggedIn', function (req, res) {
     session = req.session;
 
     if (app.locals.users.length !== 0)
-        return res.json({loggedIn: true, username: app.locals.users[0].username, dateOf: app.locals.users[0].reg_date});
+        return res.json({
+            loggedIn: true, username: app.locals.users[0].username, dateOf: app.locals.users[0].reg_date,
+            admin: app.locals.users[0].admin
+        });
     else
-        return res.json({loggedIn: false});
+        return res.json({loggedIn: false, admin: false});
 });
 
 app.get('/internal/tvs', function (req, res) {
@@ -233,9 +236,9 @@ app.post('/internal/remove-from-basket', function (req, res) {
 
     var Basket = require('./models/basket');
     if (app.locals.users.length !== 0) {
-        Basket.findOne({username: app.locals.users[0].username, id: bid }).exec(function (err, basket) {
-            if(basket.length !== 0){
-                basket.remove(function(err) {
+        Basket.findOne({username: app.locals.users[0].username, id: bid}).exec(function (err, basket) {
+            if (basket.length !== 0) {
+                basket.remove(function (err) {
                     if (err) throw err;
 
                     console.log('Item successfully deleted!');
@@ -244,6 +247,41 @@ app.post('/internal/remove-from-basket', function (req, res) {
 
         });
 
+    } else {
+        res.send('[]');
+        console.log('Not logged in!')
+    }
+});
+
+app.post('/internal/remove-product', function (req, res) {
+    session = req.session;
+
+    var pid = req.body.product_id;
+
+    var Basket = require('./models/basket');
+    var Product = require('./models/products');
+    var Comment = require('./models/comments');
+
+    if (app.locals.users.length !== 0) {
+        if (app.locals.users[0].admin) {
+
+            Comment.remove({product_id: pid}).exec(function (err) {
+                if (err) throw err;
+            });
+
+            Basket.remove({product_id: pid}).exec(function (err) {
+                if (err) throw err;
+            });
+
+            Product.remove({id: pid}).exec(function (err) {
+                if (err) throw err;
+                console.log('Product removed!')
+            });
+
+        } else {
+            res.send('[]');
+            console.log('Not logged in!')
+        }
     } else {
         res.send('[]');
         console.log('Not logged in!')
