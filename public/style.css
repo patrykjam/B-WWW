@@ -1,0 +1,57 @@
+.carousel-indicators li {
+    visibility: hidden;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+.detailBox {
+    width: 320px;
+    border: 1px solid #bbb;
+    margin: 20px;
+}
+
+.actionBox .form-group * {
+    width: 100%;
+}
+
+.commentList {
+    padding: 0;
+    list-style: none;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.commentList li > div {
+    display: table-cell;
+}
+
+.commentText p {
+    margin: auto;
+    font-size: 11px;
+}
+
+.sub-text {
+    color: #aaa;
+    font-family: verdana, serif;
+    font-size: 11px;
+    margin: auto;
+}
+
+.actionBox {
+    border-top: 1px dotted #bbb;
+    padding: 10px;
+}
+
+.myImg {
+    width: 100%;
+}
+
+.form-my {
+    width: 1000px;
+}
+
+input[type=file] {
+    margin: 0 auto;
+}
