@@ -4,13 +4,13 @@
 <div class="jumbotron text-center">
     <div ng-bind-html="header"></div>
     <div class="add-product">
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="/add-new-product" method="post" enctype="multipart/form-data">
             <label for="name">Nazwa: </label>
             <input type="text" class="form-control" id="name" name="name" required>
             <label for="specs">Specyfikacja:</label>
             <textarea class="form-control" id="specs" name="specification" required></textarea>
             <label>Typ:</label><br>
-            <input type="radio" name="type" id="tt" value="PC" checked> Laptop
+            <input type="radio" name="type" value="PC" checked> Laptop
             <input type="radio" name="type" value="TV"> Telewizor<br>
             <label>Zdjęcia:</label><br>
             <input type="file" name="imagefiles" required multiple>

@@ -4,8 +4,20 @@ var express = require("express");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
 var crypto = require('crypto');
-// var multer = require("multer")
-// var upload = multer({dest: 'uploads/'})
+var multer = require("multer");
+var mime = require('mime');
+var fs = require('fs');
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images/')
+    },
+    filename: function (req, file, cb) {
+        crypto.pseudoRandomBytes(16, function (err, raw) {
+            cb(null, raw.toString('hex') + Date.now() + '.' + mime.extension(file.mimetype));
+        });
+    }
+});
+var upload = multer({storage: storage});
 var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 
@@ -42,13 +54,10 @@ app.post("/login", function (req, res) {
 
     var login = req.body.username;
     var password = req.body.password;
-    console.log(login);
-    console.log(password);
     var User = require('./models/users');
 
 
     User.find({username: login}, function (err, user) {
-        console.log("login " + login);
         if (err) throw err;
         // object of the user
         if (user.length === 0) {
@@ -273,11 +282,22 @@ app.post('/internal/remove-product', function (req, res) {
                 if (err) throw err;
             });
 
-            Product.remove({id: pid}).exec(function (err) {
+            Product.find({id: pid}).exec(function (err, product) {
                 if (err) throw err;
-                console.log('Product removed!')
-            });
+                var imageFiles = product[0].images;
+                var filePath;
+                for (var j = 0; j < imageFiles.length; j++) {
+                    filePath = 'public/' + imageFiles[j];
+                    fs.unlinkSync(filePath);
+                }
 
+                Product.remove({id: pid}).exec(function (err) {
+                    if (err) throw err;
+
+                    console.log('Product removed!')
+                });
+
+            });
         } else {
             res.send('[]');
             console.log('Not logged in!')
@@ -285,6 +305,50 @@ app.post('/internal/remove-product', function (req, res) {
     } else {
         res.send('[]');
         console.log('Not logged in!')
+    }
+});
+//TODO:: remove image files
+
+app.post("/add-new-product", upload.array('imagefiles'), function (req, res) {
+    var imageFiles = req.files;
+    var badPhoto = false;
+    var filePath;
+
+    for (var i = 0; i < imageFiles.length; i++) {
+        if (imageFiles[i].originalname.indexOf("jpeg") < 0 &&
+            imageFiles[i].originalname.indexOf("jpg") < 0 &&
+            imageFiles[i].originalname.indexOf("png") < 0) {
+            res.redirect('/#/badPhoto');
+            badPhoto = true;
+            break;
+        }
+    }
+    if (badPhoto) {
+        for (var j = 0; j < imageFiles.length; j++) {
+            filePath = 'public/images/' + imageFiles[j].filename;
+            fs.unlinkSync(filePath);
+        }
+    } else {
+        var Product = require('./models/products');
+
+        var imagesArray = [];
+        for (var q = 0; q < imageFiles.length; q++) {
+            filePath = 'images/' + imageFiles[q].filename;
+            imagesArray.push(filePath)
+        }
+
+        var newProduct = Product({
+            name: req.body.name,
+            specs: req.body.specification,
+            type: req.body.type,
+            images: imagesArray
+        });
+
+        newProduct.save(function (err) {
+            if (err) throw err;
+            console.log('Product added!');
+        });
+        res.redirect('/#/newProduct')
     }
 });
 

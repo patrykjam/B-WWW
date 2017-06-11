@@ -81,6 +81,16 @@ app.config(function ($routeProvider) {
             templateUrl: 'pages/AddProduct.html',
             controller: 'addProductController'
         })
+
+        .when('/badPhoto', {
+            templateUrl: 'pages/userMessage.html',
+            controller: 'badPhotoController'
+        })
+
+        .when('/newProduct', {
+            templateUrl: 'pages/userMessage.html',
+            controller: 'newProductController'
+        })
     ;
 
 });
@@ -219,6 +229,14 @@ app.controller('removeProductController', function ($scope) {
     else {
         $scope.header = '<h1>Usuń produkt: </h1>';
     }
+});
+
+app.controller('newProductController', function ($scope) {
+    $scope.message = 'Produkt został dodany!';
+});
+
+app.controller('badPhotoController', function ($scope) {
+    $scope.message = 'Zły format zdjęcia, akceptowalne: *.png, *.jpeg, *.jpg!';
 });
 
 $(document).ready(function () {
