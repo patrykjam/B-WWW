@@ -142,5 +142,35 @@ app.get('/internal/pcs', function (req, res) {
     });
 });
 
+app.post('/internal/add-comment', function (req, res) {
+
+    var commentJson = req.body;
+    console.log(commentJson);
+    var Comment = require('./models/comments');
+
+    var newComment = Comment({
+        product_id: commentJson.product_id,
+        comment: commentJson.comment,
+        author: commentJson.author
+    });
+
+    newComment.save(function (err) {
+        if (err) throw err;
+        console.log('Comment added!');
+    });
+});
+
+app.get('/internal/get-comments/:prodid', function (req, res) {
+
+    var Comment = require('./models/comments');
+
+    var pid = req.params.prodid;
+
+    Comment.find({product_id: pid}).exec(function (err, comments) {
+        res.send(comments);
+    });
+});
+
+
 app.listen(8080);
 console.log("App listening on port 8080");

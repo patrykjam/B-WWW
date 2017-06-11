@@ -30,17 +30,19 @@ addNextPC = function () {
 
             if (data[current - 1].images.length === 1)
                 addColumnWithElement(3, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 350, 228, 1, data[current - 1].images[0]);
+                    data[current - 1].specs, 350, 228, 1, data[current - 1].id, data[current - 1].images[0]);
             if (data[current - 1].images.length === 2)
                 addColumnWithElement(3, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 350, 228, 1, data[current - 1].images[0], data[current - 1].images[1]);
+                    data[current - 1].specs, 350, 228, 1, data[current - 1].id,
+                    data[current - 1].images[0], data[current - 1].images[1]);
             if (data[current - 1].images.length === 3)
                 addColumnWithElement(3, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 350, 228, 1,
+                    data[current - 1].specs, 350, 228, 1, data[current - 1].id,
                     data[current - 1].images[0], data[current - 1].images[1], data[current - 1].images[2]);
             if (data[current - 1].images.length === 4)
                 addColumnWithElement(3, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 350, 228, 1, data[current - 1].images[0], data[current - 1].images[1],
+                    data[current - 1].specs, 350, 228, 1, data[current - 1].id,
+                    data[current - 1].images[0], data[current - 1].images[1],
                     data[current - 1].images[2], data[current - 1].images[3]);
 
             current += 1;
@@ -50,17 +52,19 @@ addNextPC = function () {
             addRow(current_row_count);
             if (data[current - 1].images.length === 1)
                 addColumnWithElement(3, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 350, 228, 1, data[current - 1].images[0]);
+                    data[current - 1].specs, 350, 228, 1, data[current - 1].id, data[current - 1].images[0]);
             if (data[current - 1].images.length === 2)
                 addColumnWithElement(3, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 350, 228, 1, data[current - 1].images[0], data[current - 1].images[1]);
+                    data[current - 1].specs, 350, 228, 1, data[current - 1].id,
+                    data[current - 1].images[0], data[current - 1].images[1]);
             if (data[current - 1].images.length === 3)
                 addColumnWithElement(3, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 350, 228, 1,
+                    data[current - 1].specs, 350, 228, 1, data[current - 1].id,
                     data[current - 1].images[0], data[current - 1].images[1], data[current - 1].images[2]);
             if (data[current - 1].images.length === 4)
                 addColumnWithElement(3, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 350, 228, 1, data[current - 1].images[0], data[current - 1].images[1],
+                    data[current - 1].specs, 350, 228, 1, data[current - 1].id,
+                    data[current - 1].images[0], data[current - 1].images[1],
                     data[current - 1].images[2], data[current - 1].images[3]);
             current += 1;
         }

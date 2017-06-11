@@ -1,30 +1,25 @@
-addCommentFun = function (rowNumber, columnNumber, device) {
+addCommentFun = function (rowNumber, columnNumber, device, pid) {
     console.log("Adding comment");
-    var numOfKey = device + "num" + rowNumber + "_" + columnNumber;
 
-    var keyname = device + "name" + rowNumber + "_" + columnNumber;
-    var wartname = $("#name" + rowNumber + "_" + columnNumber).val();
-    var keycomment = device + "com" + +rowNumber + "_" + columnNumber;
-    var wartcomment = $("#comment" + rowNumber + "_" + columnNumber).val();
+    var nameVal = $("#name" + rowNumber + "_" + columnNumber).val();
+    var commentVal = $("#comment" + rowNumber + "_" + columnNumber).val();
+    var url = "/internal/add-comment";
+    var method = "POST";
 
-    addComment(wartcomment, wartname, rowNumber, columnNumber);
-    if (typeof(Storage) !== "undefined") {
-        // check num of comments stored
-        var numOfV = localStorage.getItem(numOfKey);
-        var numOf;
-        if (numOfV === null) {
-            numOfV = "0";
-        }
-        numOf = parseInt(numOfV);
-        keyname += "_" + numOf;
-        keycomment += "_" + numOf;
-        numOf += 1;
-        localStorage.setItem(numOfKey, numOf);
-        localStorage.setItem(keyname, wartname);
-        localStorage.setItem(keycomment, wartcomment);
-    } else {
-        console.log("No local storage access");
-    }
+    var postData = JSON.stringify({product_id: pid, author: nameVal, comment: commentVal});
+    var async = true;
+
+    var request = new XMLHttpRequest();
+
+    request.onload = function () {
+    };
+
+    request.open(method, url, async);
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.send(postData.toString());
+
+    addComment(commentVal, nameVal, rowNumber, columnNumber);
+
     var form = document.getElementById("form" + rowNumber + "_" + columnNumber);
     form.reset();
     return false;
@@ -46,24 +41,12 @@ goNext = function (carousel) {
     $(carousel).carousel("next");
 };
 
-function checkRow(rowNumber, device, j) {
-    if (typeof(Storage) !== "undefined") {
-        for (var i = 1; i <= j; i++) {
-            var numOfKey = device + "num" + rowNumber + "_" + i;
-            var numOfV = localStorage.getItem(numOfKey);
-            if (numOfV !== null) {
-                var numOf = parseInt(numOfV);
-                // console.log("numof checkrow " + numOf);
-                for (var q = 0; q < numOf; q++) {
-                    var keyname = device + "name" + rowNumber + "_" + i + "_" + q;
-                    var keycomment = device + "com" + rowNumber + "_" + i + "_" + q;
-                    var vname = localStorage.getItem(keyname);
-                    var vcomment = localStorage.getItem(keycomment);
-                    addComment(vcomment, vname, rowNumber, i)
-                }
-            }
+function checkCommentsAndAdd(rowNumber, columnNumber, pid) {
+    $.getJSON('/internal/get-comments/' + pid, function (comments) {
+        for (var i = 0; i < comments.length; i++) {
+            addComment(comments[i].comment, comments[i].author, rowNumber, columnNumber);
         }
-    }
+    });
 }
 
 
@@ -73,11 +56,11 @@ function addRow(rowNumber) {
     $(".container-products").append(row);
 }
 
-function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, specs, width, height, device) { //+images
-    var N = 8;
+function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, specs, width, height, device, pid) { //+images
+    var N = 9;
     var column = $("<div class=\"col-sm-" + colSize + " col" + columnNumber + "\"></div>");
     var name = $("<p></p>").text(elementName);
-    if (arguments.length > 4) {
+    if (arguments.length > N) {
         var carouselA = $("<a href=\"#\" id=\"carLink" + rowNumber + "_" + columnNumber + "\"></a>");
         var slide = $("<div id=\"carousel" + rowNumber + "_" + columnNumber + "\" class='carousel slide' " +
             "data-ride='carousel' onclick=\"goNext('#carousel" + rowNumber + "_" + columnNumber + "')\" ></div>");
@@ -85,7 +68,7 @@ function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, spe
         for (var i = N; i < arguments.length; i++) {
             var el = i - N;
             var li = "<li data-target=\"#myCarousel\" data-slide-to=\"" + el + "\"";
-            if (el == 0) {
+            if (el === 0) {
                 li += " class=\"active\"></li>"
             } else {
                 li += "></li>"
@@ -97,7 +80,7 @@ function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, spe
         var itemSel, imageSRC, image;
         for (var j = N; j < arguments.length; j++) {
             var itemSelInside = "<div class=\"item";
-            if (j == N) {
+            if (j === N) {
                 itemSelInside += " active\"></div>"
             } else {
                 itemSelInside += "\"></div>"
@@ -153,7 +136,7 @@ function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, spe
     var comment = $(commentSel);
 
     var formSel = "<form id=\"form" + rowNumber + "_" + columnNumber + "\" " +
-        "onsubmit=\"return addCommentFun(" + rowNumber + "," + columnNumber + "," + device + ")\"></form>";
+        "onsubmit=\"return addCommentFun(" + rowNumber + "," + columnNumber + "," + device + "," + pid + ")\"></form>";
 
     var form = $(formSel);
 
@@ -206,16 +189,32 @@ function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, spe
 
     $(".row" + rowNumber).append(column);
 
+    checkCommentsAndAdd(rowNumber, columnNumber, pid);
+
     $("#carLink" + rowNumber + "_" + columnNumber).click(function (e) {
-        console.log("Carlink" + rowNumber + "_" + columnNumber);
+        // console.log("Carlink" + rowNumber + "_" + columnNumber);
         e.preventDefault();
         e.stopPropagation();
     });
 
-    $("#form" + rowNumber + "and" + columnNumber).submit(function(e) {
+    $("#form" + rowNumber + "and" + columnNumber).submit(function (e) {
+
         e.preventDefault();
-        console.log("logg");
-        $.post("/addToBasket?name=" + elementName, function (receivedData) {
-        });
+        // console.log("logg");
+
+        var url = "/internal/add-to-basket";
+        var method = "POST";
+
+        var postData = JSON.stringify({product_id: pid, author: nameVal, comment: commentVal});
+        var async = true;
+
+        var request = new XMLHttpRequest();
+
+        request.onload = function () {
+        };
+
+        request.open(method, url, async);
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        request.send(postData.toString());
     });
 }

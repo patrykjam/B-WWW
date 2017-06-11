@@ -17,9 +17,6 @@ var scrollListener = function () {
         }
     });
 };
-
-//TODO: checkRow(x,y,z); initially it was after every addXthColumn - ties with db comments
-
 addNextTV = function () {
     console.log('Adding next');
     if (current > number_of_tvs) {
@@ -31,17 +28,19 @@ addNextTV = function () {
 
             if (data[current - 1].images.length === 1)
                 addColumnWithElement(6, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 700, 500, 2, data[current - 1].images[0]);
+                    data[current - 1].specs, 700, 500, 2, data[current - 1].id, data[current - 1].images[0]);
             if (data[current - 1].images.length === 2)
                 addColumnWithElement(6, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 700, 500, 2, data[current - 1].images[0], data[current - 1].images[1]);
+                    data[current - 1].specs, 700, 500, 2, data[current - 1].id,
+                    data[current - 1].images[0], data[current - 1].images[1]);
             if (data[current - 1].images.length === 3)
                 addColumnWithElement(6, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 700, 500, 2,
+                    data[current - 1].specs, 700, 500, 2, data[current - 1].id,
                     data[current - 1].images[0], data[current - 1].images[1], data[current - 1].images[2]);
             if (data[current - 1].images.length === 4)
                 addColumnWithElement(6, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 700, 500, 2, data[current - 1].images[0], data[current - 1].images[1],
+                    data[current - 1].specs, 700, 500, 2, data[current - 1].id, data[current - 1].images[0],
+                    data[current - 1].images[1],
                     data[current - 1].images[2], data[current - 1].images[3]);
 
             current += 1;
@@ -51,17 +50,17 @@ addNextTV = function () {
             addRow(current_row_count);
             if (data[current - 1].images.length === 1)
                 addColumnWithElement(6, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 700, 500, 2, data[current - 1].images[0]);
+                    data[current - 1].specs, 700, 500, 2, data[current - 1].id, data[current - 1].images[0]);
             if (data[current - 1].images.length === 2)
                 addColumnWithElement(6, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 700, 500, 2, data[current - 1].images[0], data[current - 1].images[1]);
+                    data[current - 1].specs, 700, 500, 2, data[current - 1].id, data[current - 1].images[0], data[current - 1].images[1]);
             if (data[current - 1].images.length === 3)
                 addColumnWithElement(6, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 700, 500, 2,
+                    data[current - 1].specs, 700, 500, 2, data[current - 1].id,
                     data[current - 1].images[0], data[current - 1].images[1], data[current - 1].images[2]);
             if (data[current - 1].images.length === 4)
                 addColumnWithElement(6, current_row_count, current_col_count, data[current - 1].name,
-                    data[current - 1].specs, 700, 500, 2, data[current - 1].images[0], data[current - 1].images[1],
+                    data[current - 1].specs, 700, 500, 2, data[current - 1].id, data[current - 1].images[0], data[current - 1].images[1],
                     data[current - 1].images[2], data[current - 1].images[3]);
             current += 1;
         }
