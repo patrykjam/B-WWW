@@ -1,9 +1,9 @@
 <head>
-    <!--<script src="files/removeProduct.js"></script>-->
+    <script src="files/addProduct.js"></script>
 </head>
 <div class="jumbotron text-center">
     <div ng-bind-html="header"></div>
-    <div class="add-product">
+    <div class="add-product" hidden>
         <form action="/add-new-product" method="post" enctype="multipart/form-data">
             <label for="name">Nazwa: </label>
             <input type="text" class="form-control" id="name" name="name" required>

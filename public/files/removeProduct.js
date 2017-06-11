@@ -44,6 +44,13 @@ function getName(pid, products) {
 }
 
 $(document).ready(function () {
+    $.getJSON('/internal/loggedIn', function (logged) {
+        if(logged.loggedIn && logged.admin){
+            $(".container-remove-product").show();
+        } else {
+            $(".container-remove-product").hide();
+        }
+    });
     $.getJSON('/internal/products', function (products) {
         if (products.length === 0)
             $(".table-remove-product").hide();

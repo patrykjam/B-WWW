@@ -128,7 +128,6 @@ app.post("/register", function (req, res) {
 
 app.get('/internal/loggedIn', function (req, res) {
     session = req.session;
-
     if (app.locals.users.length !== 0)
         return res.json({
             loggedIn: true, username: app.locals.users[0].username, dateOf: app.locals.users[0].reg_date,
@@ -314,41 +313,56 @@ app.post("/add-new-product", upload.array('imagefiles'), function (req, res) {
     var badPhoto = false;
     var filePath;
 
-    for (var i = 0; i < imageFiles.length; i++) {
-        if (imageFiles[i].originalname.indexOf("jpeg") < 0 &&
-            imageFiles[i].originalname.indexOf("jpg") < 0 &&
-            imageFiles[i].originalname.indexOf("png") < 0) {
-            res.redirect('/#/badPhoto');
-            badPhoto = true;
-            break;
-        }
-    }
-    if (badPhoto) {
-        for (var j = 0; j < imageFiles.length; j++) {
-            filePath = 'public/images/' + imageFiles[j].filename;
-            fs.unlinkSync(filePath);
+    if (app.locals.users.length !== 0) {
+        if (app.locals.users[0].admin) {
+
+            for (var i = 0; i < imageFiles.length; i++) {
+                if (imageFiles[i].originalname.indexOf("jpeg") < 0 &&
+                    imageFiles[i].originalname.indexOf("jpg") < 0 &&
+                    imageFiles[i].originalname.indexOf("png") < 0) {
+                    res.redirect('/#/badPhoto');
+                    badPhoto = true;
+                    break;
+                }
+            }
+            if (badPhoto) {
+                for (var j = 0; j < imageFiles.length; j++) {
+                    filePath = 'public/images/' + imageFiles[j].filename;
+                    fs.unlinkSync(filePath);
+                }
+            } else {
+                var Product = require('./models/products');
+
+                var imagesArray = [];
+                for (var q = 0; q < imageFiles.length; q++) {
+                    filePath = 'images/' + imageFiles[q].filename;
+                    imagesArray.push(filePath)
+                }
+
+                var newProduct = Product({
+                    name: req.body.name,
+                    specs: req.body.specification,
+                    type: req.body.type,
+                    images: imagesArray
+                });
+
+                newProduct.save(function (err) {
+                    if (err) throw err;
+                    console.log('Product added!');
+                });
+                res.redirect('/#/newProduct')
+            }
+        } else {
+            for (var k = 0; k < imageFiles.length; k++) {
+                filePath = 'public/images/' + imageFiles[k].filename;
+                fs.unlinkSync(filePath);
+            }
         }
     } else {
-        var Product = require('./models/products');
-
-        var imagesArray = [];
-        for (var q = 0; q < imageFiles.length; q++) {
-            filePath = 'images/' + imageFiles[q].filename;
-            imagesArray.push(filePath)
+        for (var m = 0; m < imageFiles.length; m++) {
+            filePath = 'public/images/' + imageFiles[m].filename;
+            fs.unlinkSync(filePath);
         }
-
-        var newProduct = Product({
-            name: req.body.name,
-            specs: req.body.specification,
-            type: req.body.type,
-            images: imagesArray
-        });
-
-        newProduct.save(function (err) {
-            if (err) throw err;
-            console.log('Product added!');
-        });
-        res.redirect('/#/newProduct')
     }
 });
 
