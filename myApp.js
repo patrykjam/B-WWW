@@ -25,6 +25,8 @@ var app = express();
 
 var session = require("express-session");
 
+app.set('port', (process.env.PORT || 8080));
+
 mongoose.connect('mongodb://bwww:bwww@ds163711.mlab.com:63711/b-www');
 
 var db = mongoose.connection;
@@ -367,5 +369,6 @@ app.post("/add-new-product", upload.array('imagefiles'), function (req, res) {
 });
 
 
-app.listen(8080);
-console.log("App listening on port 8080");
+app.listen(app.get('port'), function() {
+    console.log('Node app is running on port', app.get('port'));
+});
