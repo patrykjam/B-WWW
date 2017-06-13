@@ -205,11 +205,10 @@ function addColumnWithElement(colSize, rowNumber, columnNumber, elementName, spe
     column.append(addCommentButton);
     column.append(comment);
 
-    // $.getJSON('/internal/loggedIn', function (logged) {
-    //     if(logged.loggedIn)
-    //         column.append(addToBasketButton)
-    // }); TODO: THIS
-    column.append(addToBasketButton);
+    $.getJSON('/internal/loggedIn', function (logged) {
+        if(logged.loggedIn)
+            column.append(addToBasketButton)
+    });
 
     $(".row" + rowNumber).append(column);
 
